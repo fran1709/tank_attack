@@ -7,7 +7,7 @@ public class Road {
 
     public void Start(){
         // Connection with data base.
-		Query conn = new Query("consult",new Term[] {new Atom("C:\\Users\\vecti\\eclipse-workspace\\Tank_Attack\\src\\com\\prolog\\dataBase.pl")});
+		Query conn = new Query("consult",new Term[] {new Atom("C:\\Users\\vecti\\OneDrive - Estudiantes ITCR\\TEC\\2022\\Semestre II\\Lenguajes de Programacion\\Segundo Proyecto Programado\\tank_attack\\src\\com\\prolog\\dataBase.pl")});
 		System.out.println("Connection " + (conn.hasSolution() ? "succeeded" : "failed") + " to the data base.\n");
     }
 

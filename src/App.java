@@ -11,7 +11,7 @@ public class App {
         main_Window window = new main_Window();
     }
     public static void main(String[] args) {
-        //prolog();
+        prolog();
         app();
     }
 }
