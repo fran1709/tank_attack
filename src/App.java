@@ -8,10 +8,10 @@ public class App {
         camino.Hijos();
     }
     private static void app(){
-        main_Window window = new main_Window();
+        main_window window = new main_window();
     }
     public static void main(String[] args) {
-        prolog();
+        //prolog();
         app();
     }
 }
