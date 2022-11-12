@@ -4,10 +4,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
+    //Variables que indican si se presiona las teclas
     public boolean upPressed, downPressed, rightPressed, leftPressed;
     @Override
     public void keyTyped(KeyEvent e) {}
 
+    //Función que se ejecuta cuando se presiona una tecla
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
@@ -25,6 +27,7 @@ public class KeyHandler implements KeyListener {
         }
     }
 
+    //Función que se ejecuta cuando se deja de presionar una tecla
     @Override
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();

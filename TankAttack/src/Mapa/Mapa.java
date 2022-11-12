@@ -7,11 +7,11 @@ import java.awt.*;
 import java.io.*;
 
 public class Mapa {
-    GamePanel panel;
-    public Muro[] muros;
-    public int[][] mapa;
+    GamePanel panel; //Panel
+    public Muro[] muros; //Lista con los tipos de muro que existen
+    public int[][] mapa; //Matriz que almacena los datos del mapa
 
-    public Mapa(GamePanel p){
+    public Mapa(GamePanel p){ //Constructor de la clase mapa
         this.panel = p;
         muros = new Muro[3];
         mapa = new int[panel.maxScreenCol][panel.maxScreenRow];
@@ -19,6 +19,7 @@ public class Mapa {
         cargarMapa("src/Mapa/Mapa1.0");
     }
 
+    //Método que carga las imágenes de los muros
     public void getImagenMuro(){
         try {
             muros[0] = new Muro();
@@ -37,6 +38,7 @@ public class Mapa {
         }
     }
 
+    //Método que carga el mapa del juego (tomándolo de una matriz almacenada en un archivo de texto)
     public void cargarMapa(String map){
         try {
             FileReader fr = new FileReader(map);
@@ -63,6 +65,7 @@ public class Mapa {
 
     }
 
+    //Método que dibuja el mapa en el panel
     public void draw(Graphics2D g2){
         int col = 0, fil = 0, x = 0, y = 0;
         while (col < panel.maxScreenCol && fil < panel.maxScreenRow){

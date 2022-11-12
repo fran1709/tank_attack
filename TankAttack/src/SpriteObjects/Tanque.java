@@ -1,20 +1,22 @@
 package SpriteObjects;
-
 import Main.GamePanel;
 import Main.KeyHandler;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+//Clase Tanque extiende de la clase Sprite
 public class Tanque extends Sprite {
     GamePanel panel;
     KeyHandler keyH;
     public int objetivo1 = 0;
     public int objetivo2 = 0;
+    public int totalObjetivos;
     public int vidas;
+
+    //Constructor de la clase
     public Tanque(GamePanel p, KeyHandler kH){
         this.panel = p;
         this.keyH = kH;
@@ -30,6 +32,7 @@ public class Tanque extends Sprite {
         getImagenes();
     }
 
+    //Inicialización de una instancia de tanque con valores por defecto
     public void initTanque(){
         x = 350;
         y = 350;
@@ -37,6 +40,7 @@ public class Tanque extends Sprite {
         direccion = "UP";
     }
 
+    //Carga de las imágenes del objeto Tanque
     public void getImagenes(){
         try {
             up = ImageIO.read(new FileInputStream("src/Imagenes/Jugador_UP.png"));
@@ -50,8 +54,13 @@ public class Tanque extends Sprite {
         }
     }
 
+    //Método que actualiza la posición del tanque y verifica si el juego ya se completó
     @Override
     public void update() {
+
+        if (this.objetivo1+objetivo2 == this.totalObjetivos || this.vidas == 0){
+            panel.gameOver = true;
+        }
         if (keyH.upPressed == true || keyH.downPressed == true
                 || keyH.leftPressed == true || keyH.rightPressed == true) {
             if (keyH.upPressed == true) {
@@ -64,14 +73,15 @@ public class Tanque extends Sprite {
                 direccion = "RIGHT";
             }
 
-            // CHECK TILE COLLISION
+            //Comprobar colisión con los muros
             colisionOn = false;
             panel.ck.checkTile(this);
 
-            //CHECK OBJECT COLLISION
+            //Comprobar colisión con los objetivos
             int objIndex = panel.ck.CheckObject(this, true);
             recolectarObjetivo(objIndex);
 
+            //Si no hay colisión se mueve el tanque jugador
             if (colisionOn == false ) {
                 switch (direccion) {
                     case "UP":
@@ -92,6 +102,7 @@ public class Tanque extends Sprite {
         }
     }
 
+    //Método de recolección de objetivos
     public void recolectarObjetivo(int i){
         if(i != 999){
             switch (panel.obj[i].nombre){
@@ -106,6 +117,7 @@ public class Tanque extends Sprite {
         }
     }
 
+    //Método dibujar
     public void draw(Graphics2D g2) {
         BufferedImage imagen = null;
         switch (direccion){

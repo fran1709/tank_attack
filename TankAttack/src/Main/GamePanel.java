@@ -11,27 +11,32 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class GamePanel extends JPanel implements Runnable {
+    //Configuración del tamaño del GamePanel
     final int originalTileSize = 16;
     final int scale = 3;
     public final int tileSize = originalTileSize * scale;
     public final int maxScreenCol = 16;
     public final int maxScreenRow = 12;
-    public final int screenWidth = tileSize * maxScreenCol; //512
-    public final int screenHeight = tileSize * maxScreenRow; //448
+    public final int screenWidth = tileSize * maxScreenCol;
+    public final int screenHeight = tileSize * maxScreenRow;
+
+    //Bandera de Game Over
     public boolean gameOver = false;
+
+    //Frames por segundo (cantidad de veces que se actualiza el mapa)
     int fps = 60;
-    Font arial_40;
-    BufferedImage obj1Imagen, obj2Imagen;
+    Font arial_40; //Declaración de fuente (tipo de letra)
+    BufferedImage obj1Imagen, obj2Imagen; //Imágenes de los objetivos
 
-    public Thread gameThread;
-    KeyHandler keyControl = new KeyHandler();
+    public Thread gameThread; //Thread de juego
+    KeyHandler keyControl = new KeyHandler(); //Controlador de la entrada por teclado
 
-    Tanque jugador = new Tanque(this, keyControl);
-    public Objeto obj[] = new Objeto[10];
-    Mapa map = new Mapa(this);
-    public ColisionHandler ck = new ColisionHandler(this);
+    Tanque jugador = new Tanque(this, keyControl); //Instancia del tanque jugador
+    public Objeto obj[] = new Objeto[10]; //Lista de objetivos
+    Mapa map = new Mapa(this); //Mapa del juego
+    public ColisionHandler ck = new ColisionHandler(this); //Controlador de colisiones entre objetos
 
-    public GamePanel(){
+    public GamePanel(){ //Constructor de la clase GamePanel
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
@@ -44,11 +49,13 @@ public class GamePanel extends JPanel implements Runnable {
         obj2Imagen = o2.imagen;
     }
 
+    //Inicialización del Thread del juego
     public void startGameThread(){
         gameThread = new Thread(this);
         gameThread.start();
     }
 
+    //Runnable del Thread del juego
     @Override
     public void run() {
         double drawInterval = 1000000000/fps;
@@ -72,10 +79,12 @@ public class GamePanel extends JPanel implements Runnable {
 
     }
 
+    //Método que actualiza los elementos del panel
     public void update(){
         jugador.update();
     }
 
+    //Método que dibuja los elementos en el panel
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -91,24 +100,30 @@ public class GamePanel extends JPanel implements Runnable {
         g2.dispose();
     }
 
+    //Método que crea los objetos que se muestran el en mapa (panel)
     public void initObjetivos(){
         this.obj[0] = new Objetivo1();
         this.obj[0].x = 6 * this.tileSize;
         this.obj[0].y = 8 * this.tileSize;
+        jugador.totalObjetivos++;
 
         this.obj[1] = new Objetivo1();
         this.obj[1].x = 10 * this.tileSize;
         this.obj[1].y = 7 * this.tileSize;
+        jugador.totalObjetivos++;
 
         this.obj[2] = new Objetivo2();
         this.obj[2].x = 13 * this.tileSize;
         this.obj[2].y = 3 * this.tileSize;
+        jugador.totalObjetivos++;
 
         this.obj[3] = new Objetivo2();
         this.obj[3].x = 8 * this.tileSize;
         this.obj[3].y = 5 * this.tileSize;
+        jugador.totalObjetivos++;
     }
 
+    //Método que dibuja las estadísticas del juego, (objetivos recolectados, vida del jugador y mensaje de Game Over)
     public void drawStats(Graphics2D g2){
         if(gameOver){
             g2.setFont(arial_40);
@@ -135,6 +150,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    //Método que configura juego
     public void gameSetUp(){
         this.initObjetivos();
 

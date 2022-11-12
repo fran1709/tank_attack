@@ -3,12 +3,13 @@ package Main;
 import SpriteObjects.Sprite;
 
 public class ColisionHandler {
-    GamePanel panel;
+    GamePanel panel; //GamePanel del juego
 
-    public ColisionHandler(GamePanel panel) {
+    public ColisionHandler(GamePanel panel) { //Constructor de la clase ColisionHandler
         this.panel = panel;
     }
 
+    //Método que verifica si el jugador colisiona con los muros del mapa
     public void checkTile(Sprite entity) {
 
         int entityLeftX = entity.x + entity.solidArea.x;
@@ -61,6 +62,7 @@ public class ColisionHandler {
         }
     }
 
+    //Método que verifica si el jugador colisiona con los objetivos
     public int CheckObject(Sprite entity, boolean player){
         int index = 999;
         for(int i = 0; i < panel.obj.length; i++){
