@@ -81,7 +81,7 @@ public class Tanque extends Sprite {
             int objIndex = panel.ck.CheckObject(this, true);
             recolectarObjetivo(objIndex);
 
-            panel.ck.check_enemy(this);
+            //panel.ck.check_enemy(this);
 
             //Si no hay colisión se mueve el tanque jugador
             if (!colisionOn) {

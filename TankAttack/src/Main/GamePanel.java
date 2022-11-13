@@ -4,6 +4,7 @@ import Mapa.Mapa;
 import Objetos.Objetivo1;
 import Objetos.Objetivo2;
 import Objetos.Objeto;
+import Prolog.Road;
 import SpriteObjects.Enemy;
 import SpriteObjects.Sprite;
 import SpriteObjects.Tanque;
@@ -11,6 +12,7 @@ import SpriteObjects.Tanque;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 public class GamePanel extends JPanel implements Runnable {
     //Configuración del tamaño del GamePanel
@@ -35,10 +37,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     // ------ENTIDADES & OBJETOS-----
     Tanque jugador = new Tanque(this, keyControl); //Instancia del tanque jugador
-    public Objeto obj[] = new Objeto[10]; //Lista de objetivos
-    public Sprite enemy[] = new Sprite[10];
-
+    public Objeto[] obj = new Objeto[10]; //Lista de objetivos
+    public Sprite[] enemy = new Sprite[10];
     Mapa map = new Mapa(this); //Mapa del juego
+    public Road caminos = new Road();
     public ColisionHandler ck = new ColisionHandler(this); //Controlador de colisiones entre objetos
 
     public GamePanel(){ //Constructor de la clase GamePanel
@@ -52,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable {
         obj1Imagen = o1.imagen;
         Objetivo2 o2 = new Objetivo2();
         obj2Imagen = o2.imagen;
+        cargar_mapa();
     }
 
     //Inicialización del Thread del juego
@@ -90,8 +93,6 @@ public class GamePanel extends JPanel implements Runnable {
         for (Sprite sprite : enemy) {
             if (sprite != null) {
                 sprite.update();
-                sprite.posicionar_player(String.valueOf(sprite.x), String.valueOf(sprite.y),
-                        String.valueOf(jugador.x), String.valueOf(jugador.y));
             }
         }
     }
@@ -110,7 +111,8 @@ public class GamePanel extends JPanel implements Runnable {
         for (Sprite sprite : enemy) {
             if (sprite != null) {
                 sprite.draw(g2, this);
-                //sprite.cargar_mapa(map);
+                sprite.posicionar_player(String.valueOf(sprite.x/48), String.valueOf(sprite.y/48),
+                        String.valueOf(jugador.x/48), String.valueOf(jugador.y/48), caminos);
             }
         }
         jugador.draw(g2);
@@ -171,22 +173,65 @@ public class GamePanel extends JPanel implements Runnable {
         this.enemy[0] = new Enemy(this);
         this.enemy[0].x = this.tileSize * 7;
         this.enemy[0].y = this.tileSize * 8;
-        this.enemy[0].cargar_mapa(map);
 
         this.enemy[1] = new Enemy(this);
         this.enemy[1].x = this.tileSize * 7;
         this.enemy[1].y = this.tileSize * 4;
-        this.enemy[1].cargar_mapa(map);
+
 
         this.enemy[2] = new Enemy(this);
         this.enemy[2].x = this.tileSize * 11;
         this.enemy[2].y = this.tileSize * 2;
-        this.enemy[2].cargar_mapa(map);
     }
+
+    /**
+     * Método encargado de proporcionarle el conocimiento a prolog.
+     */
+    public void cargar_mapa() {
+        int[][] matriz = this.map.mapa;
+        for (int i = 1; i < matriz.length-1; i++) {
+            for (int j = 1; j < matriz[i].length-1; j++) {
+                if (matriz[i][j] == 0){
+                    if (matriz[i+1][j]==0){
+                        System.out.println("Fila:" + i);
+                        System.out.println("Columna:" + j);
+                        System.out.println("X"+String.valueOf(i) +"Y"+String.valueOf(j) +"->"+
+                                "X"+String.valueOf(i+1) +"Y"+String.valueOf(j));
+                        caminos.add("X" + String.valueOf(i) + "Y"+String.valueOf(j),
+                                "X"+ (String.valueOf(i+1)) + "Y"+String.valueOf(j));
+                    }
+                    else if (matriz[i][j+1] == 0){
+                        System.out.println("Fila:" + i);
+                        System.out.println("Columna:" + j);
+                        System.out.println("X"+String.valueOf(i) +"Y"+String.valueOf(j) +"->"+
+                                "X"+String.valueOf(i) +"Y"+String.valueOf(j+1));
+                        caminos.add("X" + String.valueOf(i) + "Y"+String.valueOf(j),
+                                "X"+ (String.valueOf(i)) + "Y"+String.valueOf(j+1));
+                    } else if (matriz[i-1][j]==0){
+                        System.out.println("Fila:" + i);
+                        System.out.println("Columna:" + j);
+                        System.out.println("X"+String.valueOf(i) +"Y"+String.valueOf(j) +"->"+
+                                "X"+String.valueOf(i-1) +"Y"+String.valueOf(j));
+                        caminos.add("X" + String.valueOf(i) + "Y"+String.valueOf(j),
+                                "X"+ (String.valueOf(i-1)) + "Y"+String.valueOf(j));
+                    } else if(matriz[i][j-1] == 0){
+                        System.out.println("Fila:" + i);
+                        System.out.println("Columna:" + j);
+                        System.out.println("X"+String.valueOf(i) +"Y"+String.valueOf(j) +"->"+
+                                "X"+String.valueOf(i) +"Y"+String.valueOf(j-1));
+                        caminos.add("X" + String.valueOf(i) + "Y"+String.valueOf(j),
+                                "X"+ (String.valueOf(i)) + "Y"+String.valueOf(j-1));
+                    }
+                }
+            }
+        }
+    }
+
 
     //Método que configura juego
     public void gameSetUp(){
         this.initEnemys();
         this.initObjetivos();
+        //this.initMapProlog();
     }
 }

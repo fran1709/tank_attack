@@ -47,7 +47,7 @@ public class Mapa {
             while (col < panel.maxScreenCol && fil < panel.maxScreenRow){
                 String line = br.readLine();
                 while (col < panel.maxScreenCol){
-                    String numeros[] = line.split(" ");
+                    String[] numeros = line.split(" ");
                     int numero = Integer.parseInt(numeros[col]);
                     mapa[col][fil] = numero;
                     col++;
@@ -64,7 +64,6 @@ public class Mapa {
         }
 
     }
-
     //Método que dibuja el mapa en el panel
     public void draw(Graphics2D g2){
         int col = 0, fil = 0, x = 0, y = 0;

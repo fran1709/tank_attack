@@ -4,22 +4,14 @@ import javax.swing.*;
 import Prolog.Road;
 
 public class Main {
-    public static void prolog(){
-        Road DB = new Road();
-        DB.Start();
-        DB.add("x","y");
-        DB.add("y","z");
-        DB.add("z","a");
-        DB.path("x","a");
-    }
     public static void main(String[] args) {
-        prolog();
+
         //Configuración del frame principal
         JFrame principal = new JFrame();
         principal.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         principal.setResizable(false);
         principal.setTitle("Tank Attack");
-        principal.setIconImage(new ImageIcon("src/Imagenes/icon.png  ").getImage());
+        principal.setIconImage(new ImageIcon("src/Imagenes/icon.png").getImage());
 
         //Creación del GamePanel
         GamePanel juego = new GamePanel();
