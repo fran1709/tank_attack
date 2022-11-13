@@ -90,6 +90,8 @@ public class GamePanel extends JPanel implements Runnable {
         for (Sprite sprite : enemy) {
             if (sprite != null) {
                 sprite.update();
+                sprite.posicionar_player(String.valueOf(sprite.x), String.valueOf(sprite.y),
+                        String.valueOf(jugador.x), String.valueOf(jugador.y));
             }
         }
     }
@@ -108,6 +110,7 @@ public class GamePanel extends JPanel implements Runnable {
         for (Sprite sprite : enemy) {
             if (sprite != null) {
                 sprite.draw(g2, this);
+                //sprite.cargar_mapa(map);
             }
         }
         jugador.draw(g2);
@@ -168,14 +171,17 @@ public class GamePanel extends JPanel implements Runnable {
         this.enemy[0] = new Enemy(this);
         this.enemy[0].x = this.tileSize * 7;
         this.enemy[0].y = this.tileSize * 8;
+        this.enemy[0].cargar_mapa(map);
 
         this.enemy[1] = new Enemy(this);
         this.enemy[1].x = this.tileSize * 7;
         this.enemy[1].y = this.tileSize * 4;
+        this.enemy[1].cargar_mapa(map);
 
         this.enemy[2] = new Enemy(this);
         this.enemy[2].x = this.tileSize * 11;
         this.enemy[2].y = this.tileSize * 2;
+        this.enemy[2].cargar_mapa(map);
     }
 
     //Método que configura juego

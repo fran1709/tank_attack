@@ -16,7 +16,7 @@ public class Road {
 		Variable path = new Variable("Camino");
 		Variable weight = new Variable("Peso");
 		Query best_path = new Query("path", new Term[] {new Atom(x), new Atom(y),path,weight});
-		System.out.println( "Best solution of path("+x+", "+y+")");
+		System.out.println( "Best solution of path("+x.toString()+", "+y+")");
 		System.out.println(best_path.oneSolution()+"\n");
 		best_path.close();
     }

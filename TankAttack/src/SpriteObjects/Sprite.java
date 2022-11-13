@@ -1,5 +1,6 @@
 package SpriteObjects;
 import Main.GamePanel;
+import Mapa.Mapa;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -21,4 +22,6 @@ public abstract class Sprite {
     //Método actualizar
     public void update() {
     }
+    public void posicionar_player(String pX, String pY, String pEx, String pEy){}
+    public void cargar_mapa(Mapa pMap){}
 }

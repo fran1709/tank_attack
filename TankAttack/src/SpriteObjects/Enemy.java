@@ -1,15 +1,19 @@
 package SpriteObjects;
 
 import Main.GamePanel;
+import Mapa.Mapa;
+import Prolog.Road;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Enemy extends Sprite{
+    public Road camino = new Road();
     public GamePanel panel;
     public int accion_contador = 0;
     public Enemy(GamePanel pGp){
@@ -48,6 +52,42 @@ public class Enemy extends Sprite{
             }
             accion_contador = 0;
         }
+    }
+
+    /**
+     * Método encargado de proporcionarle el conocimiento a prolog.
+     * @param pMap Mapa -> int[][] lógica del mapa.
+     */
+    @Override
+    public void cargar_mapa(Mapa pMap) {
+        int[][] matriz = pMap.mapa;
+        for (int i = 2; i < matriz[0].length; i++) {
+            //System.out.println(Arrays.toString(matriz[i]));
+            for (int j = 2; j < matriz[i].length; j++) {
+                try {
+                    //System.out.println(String.valueOf(matriz[i][j])+String.valueOf(matriz[i][j]));
+                    camino.add(String.valueOf(matriz[i][j])+String.valueOf(matriz[i][j]),
+                            String.valueOf(matriz[i][j])+String.valueOf(matriz[i][j+1]));
+                    camino.add(String.valueOf(matriz[i][j])+String.valueOf(matriz[i][j]),
+                            String.valueOf(matriz[i+1][j])+String.valueOf(matriz[i][j]));
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    continue;
+                }
+                //System.out.println(Arrays.toString(matriz[i])+Arrays.toString(matriz[j]));
+                //camino.add(Arrays.toString(matriz[i])+Arrays.toString(matriz[j]), Arrays.toString(matriz[i])+Arrays.toString(matriz[j+1]));
+                //camino.add(Arrays.toString(matriz[i])+Arrays.toString(matriz[j]),Arrays.toString(matriz[i+1])+Arrays.toString(matriz[j]));
+            }
+        }
+    }
+
+    /**
+     * Método encargado de posicionar al jugador.
+     * @param pX String -> coordenada.
+     * @param pY String -> coordenada.
+     */
+    @Override
+    public void posicionar_player(String pX, String pY, String pEx, String pEy) {
+        camino.path(pX+pY, pEx+pEy);
     }
 
     @Override

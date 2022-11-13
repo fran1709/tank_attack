@@ -35,10 +35,10 @@ public class Tanque extends Sprite {
 
     //Inicialización de una instancia de tanque con valores por defecto
     public void initTanque(){
-        x = 350;
-        y = 350;
-        velocidad = 4;
-        direccion = "UP";
+        x = 50;
+        y = 50;
+        velocidad = 2;
+        direccion = "RIGHT";
     }
 
     //Carga de las imágenes del objeto Tanque
