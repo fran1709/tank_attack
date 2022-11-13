@@ -17,8 +17,9 @@ public class Tanque extends Sprite {
     public int vidas;
 
     //Constructor de la clase
-    public Tanque(GamePanel p, KeyHandler kH){
-        this.panel = p;
+    public Tanque(){}
+    public Tanque(GamePanel gp, KeyHandler kH){
+        this.panel = gp;
         this.keyH = kH;
         this.vidas = 3;
         solidArea = new Rectangle();
@@ -61,15 +62,14 @@ public class Tanque extends Sprite {
         if (this.objetivo1+objetivo2 == this.totalObjetivos || this.vidas == 0){
             panel.gameOver = true;
         }
-        if (keyH.upPressed == true || keyH.downPressed == true
-                || keyH.leftPressed == true || keyH.rightPressed == true) {
-            if (keyH.upPressed == true) {
+        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
+            if (keyH.upPressed) {
                 direccion = "UP";
-            } else if (keyH.downPressed == true) {
+            } else if (keyH.downPressed) {
                 direccion = "DOWN";
-            } else if (keyH.leftPressed == true) {
+            } else if (keyH.leftPressed) {
                 direccion = "LEFT";
-            } else if (keyH.rightPressed == true) {
+            } else if (keyH.rightPressed) {
                 direccion = "RIGHT";
             }
 
@@ -81,22 +81,15 @@ public class Tanque extends Sprite {
             int objIndex = panel.ck.CheckObject(this, true);
             recolectarObjetivo(objIndex);
 
-            //Si no hay colisión se mueve el tanque jugador
-            if (colisionOn == false ) {
-                switch (direccion) {
-                    case "UP":
-                        y -= velocidad;
-                        break;
-                    case "DOWN":
-                        y += velocidad;
-                        break;
-                    case "LEFT":
-                        x -= velocidad;
-                        break;
-                    case "RIGHT":
-                        x += velocidad;
-                        break;
+            panel.ck.check_enemy(this);
 
+            //Si no hay colisión se mueve el tanque jugador
+            if (!colisionOn) {
+                switch (direccion) {
+                    case "UP" -> y -= velocidad;
+                    case "DOWN" -> y += velocidad;
+                    case "LEFT" -> x -= velocidad;
+                    case "RIGHT" -> x += velocidad;
                 }
             }
         }
@@ -105,13 +98,9 @@ public class Tanque extends Sprite {
     //Método de recolección de objetivos
     public void recolectarObjetivo(int i){
         if(i != 999){
-            switch (panel.obj[i].nombre){
-                case "Dinero":
-                    objetivo1++;
-                    break;
-                case "Edificio":
-                    objetivo2++;
-                    break;
+            switch (panel.obj[i].nombre) {
+                case "Dinero" -> objetivo1++;
+                case "Edificio" -> objetivo2++;
             }
             panel.obj[i] = null;
         }
@@ -119,21 +108,13 @@ public class Tanque extends Sprite {
 
     //Método dibujar
     public void draw(Graphics2D g2) {
-        BufferedImage imagen = null;
-        switch (direccion){
-            case "UP":
-                imagen = up;
-                break;
-            case "DOWN":
-                imagen = down;
-                break;
-            case "RIGHT":
-                imagen = right;
-                break;
-            case "LEFT":
-                imagen = left;
-                break;
-        }
+        BufferedImage imagen = switch (direccion) {
+            case "UP" -> up;
+            case "DOWN" -> down;
+            case "RIGHT" -> right;
+            case "LEFT" -> left;
+            default -> null;
+        };
         g2.drawImage(imagen, x, y, panel.tileSize, panel.tileSize, null);
     }
 }

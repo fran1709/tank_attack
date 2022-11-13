@@ -27,38 +27,38 @@ public class ColisionHandler {
         int tileNum1, tileNum2;
 
         switch (entity.direccion) {
-            case "UP":
+            case "UP" -> {
                 entityTopRow = (entityTopY - entity.velocidad) / panel.tileSize;
                 tileNum1 = panel.map.mapa[entityLeftCol][entityTopRow];
                 tileNum2 = panel.map.mapa[entityRightCol][entityTopRow];
-                if (panel.map.muros[tileNum1].colision == true || panel.map.muros[tileNum2].colision == true) {
+                if (panel.map.muros[tileNum1].colision || panel.map.muros[tileNum2].colision) {
                     entity.colisionOn = true;
                 }
-                break;
-            case "DOWN":
+            }
+            case "DOWN" -> {
                 entityBottomRow = (entityBottomY + entity.velocidad) / panel.tileSize;
                 tileNum1 = panel.map.mapa[entityLeftCol][entityBottomRow];
                 tileNum2 = panel.map.mapa[entityRightCol][entityBottomRow];
-                if (panel.map.muros[tileNum1].colision == true || panel.map.muros[tileNum2].colision == true) {
+                if (panel.map.muros[tileNum1].colision || panel.map.muros[tileNum2].colision) {
                     entity.colisionOn = true;
                 }
-                break;
-            case "LEFT":
+            }
+            case "LEFT" -> {
                 entityLeftCol = (entityLeftX - entity.velocidad) / panel.tileSize;
                 tileNum1 = panel.map.mapa[entityLeftCol][entityTopRow];
                 tileNum2 = panel.map.mapa[entityLeftCol][entityBottomRow];
-                if (panel.map.muros[tileNum1].colision == true || panel.map.muros[tileNum2].colision == true) {
+                if (panel.map.muros[tileNum1].colision || panel.map.muros[tileNum2].colision) {
                     entity.colisionOn = true;
                 }
-                break;
-            case "RIGHT":
+            }
+            case "RIGHT" -> {
                 entityRightCol = (entityRightX + entity.velocidad) / panel.tileSize;
                 tileNum1 = panel.map.mapa[entityRightCol][entityTopRow];
                 tileNum2 = panel.map.mapa[entityRightCol][entityBottomRow];
-                if (panel.map.muros[tileNum1].colision == true || panel.map.muros[tileNum2].colision == true) {
+                if (panel.map.muros[tileNum1].colision || panel.map.muros[tileNum2].colision) {
                     entity.colisionOn = true;
                 }
-                break;
+            }
         }
     }
 
@@ -71,51 +71,51 @@ public class ColisionHandler {
                 entity.solidArea.y = entity.y + entity.solidArea.y;
                 panel.obj[i].solidArea.x = panel.obj[i].x + panel.obj[i].solidArea.x;
                 panel.obj[i].solidArea.y = panel.obj[i].y + panel.obj[i].solidArea.y;
-                switch (entity.direccion){
-                    case "UP":
+                switch (entity.direccion) {
+                    case "UP" -> {
                         entity.solidArea.y -= entity.velocidad;
-                        if(entity.solidArea.intersects(panel.obj[i].solidArea)){
-                            if(panel.obj[i].colision == true){
+                        if (entity.solidArea.intersects(panel.obj[i].solidArea)) {
+                            if (panel.obj[i].colision) {
                                 entity.colisionOn = true;
                             }
-                            if(player){
+                            if (player) {
                                 index = i;
                             }
                         }
-                        break;
-                    case "DOWN":
+                    }
+                    case "DOWN" -> {
                         entity.solidArea.y += entity.velocidad;
-                        if(entity.solidArea.intersects(panel.obj[i].solidArea)){
-                            if(panel.obj[i].colision == true){
+                        if (entity.solidArea.intersects(panel.obj[i].solidArea)) {
+                            if (panel.obj[i].colision) {
                                 entity.colisionOn = true;
                             }
-                            if(player){
+                            if (player) {
                                 index = i;
                             }
                         }
-                        break;
-                    case "LEFT":
+                    }
+                    case "LEFT" -> {
                         entity.solidArea.x -= entity.velocidad;
-                        if(entity.solidArea.intersects(panel.obj[i].solidArea)){
-                            if(panel.obj[i].colision == true){
+                        if (entity.solidArea.intersects(panel.obj[i].solidArea)) {
+                            if (panel.obj[i].colision) {
                                 entity.colisionOn = true;
                             }
-                            if(player){
+                            if (player) {
                                 index = i;
                             }
                         }
-                        break;
-                    case "RIGHT":
+                    }
+                    case "RIGHT" -> {
                         entity.solidArea.x += entity.velocidad;
-                        if(entity.solidArea.intersects(panel.obj[i].solidArea)){
-                            if(panel.obj[i].colision == true){
+                        if (entity.solidArea.intersects(panel.obj[i].solidArea)) {
+                            if (panel.obj[i].colision) {
                                 entity.colisionOn = true;
                             }
-                            if(player){
+                            if (player) {
                                 index = i;
                             }
                         }
-                        break;
+                    }
                 }
                 entity.solidArea.x = entity.solidAreaDefaultX;
                 entity.solidArea.y = entity.solidAreaDefaultY;
@@ -124,5 +124,109 @@ public class ColisionHandler {
             }
         }
         return index;
+    }
+
+    public int check_enemy(Sprite entity){
+        int index = 999;
+        for(int i = 0; i < panel.enemy.length; i++){
+            if(panel.enemy[i] != null){
+                entity.solidArea.x = entity.x + entity.solidArea.x;
+                entity.solidArea.y = entity.y + entity.solidArea.y;
+                panel.enemy[i].solidArea.x = panel.enemy[i].x + panel.enemy[i].solidArea.x;
+                panel.enemy[i].solidArea.y = panel.enemy[i].y + panel.enemy[i].solidArea.y;
+                switch (entity.direccion) {
+                    case "UP" -> {
+                        entity.solidArea.y -= entity.velocidad;
+                        if (entity.solidArea.intersects(panel.enemy[i].solidArea)) {
+                            if (panel.enemy[i].colisionOn) {
+                                entity.colisionOn = true;
+
+                            }
+
+                        }
+                    }
+                    case "DOWN" -> {
+                        entity.solidArea.y += entity.velocidad;
+                        if (entity.solidArea.intersects(panel.enemy[i].solidArea)) {
+                            if (panel.enemy[i].colisionOn) {
+                                entity.colisionOn = true;
+                            }
+
+                        }
+                    }
+                    case "LEFT" -> {
+                        entity.solidArea.x -= entity.velocidad;
+                        if (entity.solidArea.intersects(panel.enemy[i].solidArea)) {
+                            if (panel.enemy[i].colisionOn) {
+                                entity.colisionOn = true;
+                            }
+
+                        }
+                    }
+                    case "RIGHT" -> {
+                        entity.solidArea.x += entity.velocidad;
+                        if (entity.solidArea.intersects(panel.enemy[i].solidArea)) {
+                            if (panel.enemy[i].colisionOn) {
+                                entity.colisionOn = true;
+                            }
+
+                        }
+                    }
+                }
+                entity.solidArea.x = entity.solidAreaDefaultX;
+                entity.solidArea.y = entity.solidAreaDefaultY;
+                panel.enemy[i].solidArea.x = panel.enemy[i].solidAreaDefaultX;
+                panel.enemy[i].solidArea.y = panel.enemy[i].solidAreaDefaultY;
+            }
+        }
+        return index;
+    }
+    public void check_player(Sprite entity){
+        entity.solidArea.x = entity.x + entity.solidArea.x;
+        entity.solidArea.y = entity.y + entity.solidArea.y;
+        panel.jugador.solidArea.x = panel.jugador.x + panel.jugador.solidArea.x;
+        panel.jugador.solidArea.y = panel.jugador.y + panel.jugador.solidArea.y;
+        switch (entity.direccion) {
+            case "UP" -> {
+                entity.solidArea.y -= entity.velocidad;
+                if (entity.solidArea.intersects(panel.jugador.solidArea)) {
+                    if (panel.jugador.colisionOn) {
+                        entity.colisionOn = true;
+                    }
+
+                }
+            }
+            case "DOWN" -> {
+                entity.solidArea.y += entity.velocidad;
+                if (entity.solidArea.intersects(panel.jugador.solidArea)) {
+                    if (panel.jugador.colisionOn) {
+                        entity.colisionOn = true;
+                    }
+
+                }
+            }
+            case "LEFT" -> {
+                entity.solidArea.x -= entity.velocidad;
+                if (entity.solidArea.intersects(panel.jugador.solidArea)) {
+                    if (panel.jugador.colisionOn) {
+                        entity.colisionOn = true;
+                    }
+
+                }
+            }
+            case "RIGHT" -> {
+                entity.solidArea.x += entity.velocidad;
+                if (entity.solidArea.intersects(panel.jugador.solidArea)) {
+                    if (panel.jugador.colisionOn) {
+                        entity.colisionOn = true;
+                    }
+
+                }
+            }
+        }
+        entity.solidArea.x = entity.solidAreaDefaultX;
+        entity.solidArea.y = entity.solidAreaDefaultY;
+        panel.jugador.solidArea.x = panel.jugador.solidAreaDefaultX;
+        panel.jugador.solidArea.y = panel.jugador.solidAreaDefaultY;
     }
 }

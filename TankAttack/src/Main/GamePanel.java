@@ -4,6 +4,8 @@ import Mapa.Mapa;
 import Objetos.Objetivo1;
 import Objetos.Objetivo2;
 import Objetos.Objeto;
+import SpriteObjects.Enemy;
+import SpriteObjects.Sprite;
 import SpriteObjects.Tanque;
 
 import javax.swing.*;
@@ -26,13 +28,16 @@ public class GamePanel extends JPanel implements Runnable {
     //Frames por segundo (cantidad de veces que se actualiza el mapa)
     int fps = 60;
     Font arial_40; //Declaración de fuente (tipo de letra)
-    BufferedImage obj1Imagen, obj2Imagen; //Imágenes de los objetivos
+    BufferedImage obj1Imagen, obj2Imagen, enemyImg; //Imágenes de los objetivos
 
     public Thread gameThread; //Thread de juego
     KeyHandler keyControl = new KeyHandler(); //Controlador de la entrada por teclado
 
+    // ------ENTIDADES & OBJETOS-----
     Tanque jugador = new Tanque(this, keyControl); //Instancia del tanque jugador
     public Objeto obj[] = new Objeto[10]; //Lista de objetivos
+    public Sprite enemy[] = new Sprite[10];
+
     Mapa map = new Mapa(this); //Mapa del juego
     public ColisionHandler ck = new ColisionHandler(this); //Controlador de colisiones entre objetos
 
@@ -82,6 +87,11 @@ public class GamePanel extends JPanel implements Runnable {
     //Método que actualiza los elementos del panel
     public void update(){
         jugador.update();
+        for (Sprite sprite : enemy) {
+            if (sprite != null) {
+                sprite.update();
+            }
+        }
     }
 
     //Método que dibuja los elementos en el panel
@@ -90,9 +100,14 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
         map.draw(g2);
-        for (int i = 0; i < obj.length; i++){
-            if (obj[i] != null){
-                obj[i].draw(g2, this);
+        for (Objeto objeto : obj) {
+            if (objeto != null) {
+                objeto.draw(g2, this);
+            }
+        }
+        for (Sprite sprite : enemy) {
+            if (sprite != null) {
+                sprite.draw(g2, this);
             }
         }
         jugador.draw(g2);
@@ -146,13 +161,26 @@ public class GamePanel extends JPanel implements Runnable {
             g2.drawString("x "+ this.jugador.objetivo2,200,35);
             g2.drawImage(jugador.vida, 276, 0, this.tileSize, this.tileSize, null);
             g2.drawString("x "+ this.jugador.vidas,326,35);
-
         }
+    }
+
+    public void initEnemys(){
+        this.enemy[0] = new Enemy(this);
+        this.enemy[0].x = this.tileSize * 7;
+        this.enemy[0].y = this.tileSize * 8;
+
+        this.enemy[1] = new Enemy(this);
+        this.enemy[1].x = this.tileSize * 7;
+        this.enemy[1].y = this.tileSize * 4;
+
+        this.enemy[2] = new Enemy(this);
+        this.enemy[2].x = this.tileSize * 11;
+        this.enemy[2].y = this.tileSize * 2;
     }
 
     //Método que configura juego
     public void gameSetUp(){
+        this.initEnemys();
         this.initObjetivos();
-
     }
 }
