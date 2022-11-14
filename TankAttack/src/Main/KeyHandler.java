@@ -5,7 +5,14 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
     //Variables que indican si se presiona las teclas
-    public boolean upPressed, downPressed, rightPressed, leftPressed;
+    public boolean upPressed, downPressed, rightPressed, leftPressed, shotPressed;
+    GamePanel panel;
+
+    //Constructor de la clase
+    public KeyHandler(GamePanel p){
+        this.panel = p;
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {}
 
@@ -13,6 +20,13 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
+
+        if (panel.gameState == panel.titleState){
+            if (code == KeyEvent.VK_ENTER) {
+                panel.gameState = panel.playState;
+            }
+        }
+
         if (code == KeyEvent.VK_UP) {
             upPressed = true;
         }
@@ -24,6 +38,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_RIGHT) {
             rightPressed = true;
+        }
+        if (code == KeyEvent.VK_SPACE) {
+            shotPressed = true;
         }
     }
 
@@ -42,6 +59,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_RIGHT) {
             rightPressed = false;
+        }
+        if (code == KeyEvent.VK_SPACE) {
+            shotPressed = false;
         }
     }
 }

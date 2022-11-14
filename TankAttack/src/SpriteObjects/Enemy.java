@@ -73,7 +73,7 @@ public class Enemy extends Sprite{
      *
      * @param pX String -> coordenada.
      * @param pY String -> coordenada.
-     * @return
+     * @return []String -> camino hacia el jugador.
      */
     @Override
     public String[] posicionar_player(String pX, String pY) {

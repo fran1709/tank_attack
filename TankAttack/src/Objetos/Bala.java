@@ -1,9 +1,8 @@
 package Objetos;
 
 import Main.GamePanel;
-import SpriteObjects.Proyectil;
 
-public class Bala extends Proyectil {
+public class Bala extends SpriteObjects.Bala {
     GamePanel panel;
     public Bala(GamePanel panel) {
         super(panel);

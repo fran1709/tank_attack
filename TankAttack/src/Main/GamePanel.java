@@ -12,6 +12,7 @@ import SpriteObjects.Tanque;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -23,6 +24,10 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxScreenRow = 12;
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
+    //Estado del juego
+    public int gameState;
+    public int titleState = 0;
+    public int playState = 1;
 
     //Bandera de Game Over
     public boolean gameOver = false;
@@ -33,12 +38,13 @@ public class GamePanel extends JPanel implements Runnable {
     BufferedImage obj1Imagen, obj2Imagen, enemyImg; //Imágenes de los objetivos
 
     public Thread gameThread; //Thread de juego
-    KeyHandler keyControl = new KeyHandler(); //Controlador de la entrada por teclado
+    KeyHandler keyControl = new KeyHandler(this); //Controlador de la entrada por teclado
 
     // ------ENTIDADES & OBJETOS-----
     Tanque jugador = new Tanque(this, keyControl); //Instancia del tanque jugador
     public Objeto[] obj = new Objeto[10]; //Lista de objetivos
     public Sprite[] enemy = new Sprite[10];
+    public ArrayList<Sprite> balas = new ArrayList<>(); //Array de balas
     Mapa map = new Mapa(this); //Mapa del juego
     public Road caminos = new Road();
     public ColisionHandler ck = new ColisionHandler(this); //Controlador de colisiones entre objetos
@@ -93,10 +99,22 @@ public class GamePanel extends JPanel implements Runnable {
 
     //Método que actualiza los elementos del panel
     public void update(){
-        jugador.update();
-        for (Sprite sprite : enemy) {
-            if (sprite != null) {
-                sprite.update();
+        if (gameState == playState){
+            jugador.update();
+            for (Sprite sprite : enemy) {
+                if (sprite != null) {
+                    sprite.update();
+                }
+            }
+            for (int i = 0; i < balas.size(); i++){
+                if (balas.get(i) != null){
+                    if (balas.get(i).alive){
+                        balas.get(i).update();
+                    }
+                    if (balas.get(i).alive == false){
+                        balas.remove(i);
+                    }
+                }
             }
         }
     }
@@ -106,21 +124,30 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-        map.draw(g2);
-        for (Objeto objeto : obj) {
-            if (objeto != null) {
-                objeto.draw(g2, this);
+        if(gameState == titleState){
+            drawTitlePanel(g2);
+        } else {
+            map.draw(g2);
+            for (Objeto objeto : obj) {
+                if (objeto != null) {
+                    objeto.draw(g2, this);
+                }
             }
-        }
-        for (Sprite sprite : enemy) {
-            if (sprite != null) {
-                sprite.draw(g2, this);
-                //sprite.posicionar_player(String.valueOf(sprite.x/48), String.valueOf(sprite.y/48), String.valueOf(jugador.x/48), String.valueOf(jugador.y/48), caminos);
+            for (Sprite sprite : enemy) {
+                if (sprite != null) {
+                    sprite.draw(g2, this);
+                    //sprite.posicionar_player(String.valueOf(sprite.x/48), String.valueOf(sprite.y/48), String.valueOf(jugador.x/48), String.valueOf(jugador.y/48), caminos);
+                }
             }
+            for (int i = 0; i < balas.size(); i++) {
+                if (balas.get(i) != null) {
+                    balas.get(i).draw(g2);
+                }
+            }
+            jugador.draw(g2);
+            drawStats(g2);
+            g2.dispose();
         }
-        jugador.draw(g2);
-        drawStats(g2);
-        g2.dispose();
     }
 
     //Método que crea los objetos que se muestran el en mapa (panel)
@@ -230,8 +257,39 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
     }
+
+    //Método que dibuja el panel de inicio
+    public void drawTitlePanel(Graphics2D g2){
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD,96F));
+        String text = "Tank Attack";
+        int txtLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        int x = this.screenWidth/2 - txtLength/2;
+        int y = this.tileSize*3;
+
+        //Sombra
+        g2.setColor(Color.gray);
+        g2.drawString(text, x+5, y+5);
+
+        //Titulo
+        g2.setColor(Color.white);
+        g2.drawString(text, x, y);
+
+        //Imagen
+        x = this.screenWidth/2 - (this.tileSize*2)/2;
+        y += this.tileSize*2;
+        g2.drawImage(jugador.up, x, y, this.tileSize*2, this.tileSize*2, null);
+
+        //Indicación
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD,40F));
+        text = "Presione ENTER para iniciar";
+        txtLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        x = this.screenWidth/2 - txtLength/2;
+        y += this.tileSize*4;
+        g2.drawString(text, x, y);
+    }
     //Método que configura juego
     public void gameSetUp(){
+        this.gameState = titleState;
         this.initEnemys();
         this.initObjetivos();
         //this.initMapProlog();

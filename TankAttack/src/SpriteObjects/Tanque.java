@@ -16,12 +16,14 @@ public class Tanque extends Sprite {
     public int totalObjetivos;
     public int vidas;
 
+
     //Constructor de la clase
     public Tanque(GamePanel gp, KeyHandler kH){
         super(gp);
         this.panel = gp;
         this.keyH = kH;
         this.vidas = 3;
+        bala = new Bala(gp);
         solidArea = new Rectangle();
         solidArea.x = 0;
         solidArea.y = 0;
@@ -58,11 +60,10 @@ public class Tanque extends Sprite {
     //Método que actualiza la posición del tanque y verifica si el juego ya se completó
     @Override
     public void update() {
-
         if (this.objetivo1+objetivo2 == this.totalObjetivos || this.vidas == 0){
             panel.gameOver = true;
         }
-        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
+        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed){
             if (keyH.upPressed) {
                 direccion = "UP";
             } else if (keyH.downPressed) {
@@ -73,6 +74,7 @@ public class Tanque extends Sprite {
                 direccion = "RIGHT";
             }
 
+
             //Comprobar colisión con los muros
             colisionOn = false;
             panel.ck.checkTile(this);
@@ -80,8 +82,6 @@ public class Tanque extends Sprite {
             //Comprobar colisión con los objetivos
             int objIndex = panel.ck.CheckObject(this, true);
             recolectarObjetivo(objIndex);
-
-            //panel.ck.check_enemy(this);
 
             //Si no hay colisión se mueve el tanque jugador
             if (!colisionOn) {
@@ -92,6 +92,11 @@ public class Tanque extends Sprite {
                     case "RIGHT" -> x += velocidad;
                 }
             }
+        }
+        if (keyH.shotPressed && !bala.alive){
+            bala.set(x+15, y, direccion, true, this);
+            panel.balas.add(bala);
+
         }
     }
 
