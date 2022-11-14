@@ -99,6 +99,7 @@ public class Tanque extends Sprite {
 
             }*/
             panel.ck.checkEnemyBala(panel.balas,panel.enemy);
+            panel.ck.checkJugadorBala(panel.balasEnemigo, this);
 
             //Comprobar que se recibe un disparo
             int dIndex = panel.ck.CheckBulletE(this, true);

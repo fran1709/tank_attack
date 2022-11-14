@@ -45,6 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Objeto[] obj = new Objeto[10]; //Lista de objetivos
     public Sprite[] enemy = new Sprite[10];
     public ArrayList<Bala> balas = new ArrayList<>(); //Array de balas
+    public ArrayList<Bala> balasEnemigo = new ArrayList<>(); //Array de las balas enemigas
     Mapa map = new Mapa(this); //Mapa del juego
     public Road caminos = new Road();
     public ColisionHandler ck = new ColisionHandler(this); //Controlador de colisiones entre objetos
@@ -116,6 +117,16 @@ public class GamePanel extends JPanel implements Runnable {
                     }
                 }
             }
+            for (int i = 0; i < balasEnemigo.size(); i++){
+                if (balasEnemigo.get(i) != null){
+                    if (balasEnemigo.get(i).alive){
+                        balasEnemigo.get(i).update();
+                    }
+                    if (balasEnemigo.get(i).alive == false){
+                        balasEnemigo.remove(i);
+                    }
+                }
+            }
         }
     }
 
@@ -142,6 +153,11 @@ public class GamePanel extends JPanel implements Runnable {
             for (int i = 0; i < balas.size(); i++) {
                 if (balas.get(i) != null) {
                     balas.get(i).draw(g2);
+                }
+            }
+            for (int i = 0; i < balasEnemigo.size(); i++) {
+                if (balasEnemigo.get(i) != null) {
+                    balasEnemigo.get(i).draw(g2);
                 }
             }
             jugador.draw(g2);

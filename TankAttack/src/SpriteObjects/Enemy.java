@@ -103,6 +103,14 @@ public class Enemy extends Sprite{
                 case "RIGHT" -> x += velocidad;
             }
         }
+        int fireTimer = 0, fireUpdateInterval = 80;
+        if (fireTimer >= fireUpdateInterval) {
+            bala.set(x, y, direccion, true, this);
+            panel.balasEnemigo.add(bala);
+            fireTimer = 0;
+        } else {
+            fireTimer++;
+        }
     }
 
     /**
