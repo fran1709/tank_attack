@@ -1,3 +1,4 @@
+%Diciendole a prolog que haga el átomo dinámico.
 :- dynamic dist/3.
 dist().
 
@@ -18,6 +19,7 @@ dijkstra_1([D|Ds], Ss0, Ss):-
   merge(Ds1, Ds4, Ds5),
   dijkstra_1(Ds5, Ss1, Ss).
 
+%Método encargado de buscar la ruta utilizando los demás methods(dijkstra)
 path(Vertex0, Vertex, Path, Dist):-
   dijkstra(Vertex0, Ss),
   member(s(Vertex,Dist,Path), Ss), !.

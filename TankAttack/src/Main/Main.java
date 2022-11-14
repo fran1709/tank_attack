@@ -4,8 +4,8 @@ import javax.swing.*;
 import Prolog.Road;
 
 public class Main {
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
         //Configuración del frame principal
         JFrame principal = new JFrame();
         principal.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);

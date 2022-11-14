@@ -1,9 +1,6 @@
 package SpriteObjects;
 
 import Main.GamePanel;
-import Mapa.Mapa;
-import Prolog.Road;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,10 +8,20 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Random;
 
+/**
+ * Clase del tanque enemigo.
+ */
 public class Enemy extends Sprite{
+    // ATRIBUTOS
     public GamePanel panel;
     public int accion_contador = 0;
+
+    /**
+     * Constructor de la clase.
+     * @param pGp GamePanel de la clase.
+     */
     public Enemy(GamePanel pGp){
+        super(pGp);
         this.panel = pGp;
         solidArea = new Rectangle();
         solidArea.x = 0;
@@ -27,12 +34,21 @@ public class Enemy extends Sprite{
         initTanque();
 
     }
+
+    /**
+     * Método encargado de inicializar el tanque con una velocidad y dirección.
+     */
     public void initTanque(){
         velocidad = 1;
         direccion = "UP";
     }
 
+    /**
+     * Método encargado de realizar las acciones del tanque enemigo.
+     */
     public void set_acciones(){
+        String[] road = this.posicionar_player("x"+String.valueOf(this.x/48)+"y"+String.valueOf(this.y/48),
+                    "x"+String.valueOf(gpSuper.enemy[9].x/48)+"y"+String.valueOf(gpSuper.enemy[9].y/48));
         accion_contador++;
         if (accion_contador == 160) {
             Random rand = new Random();
@@ -52,18 +68,22 @@ public class Enemy extends Sprite{
             accion_contador = 0;
         }
     }
-
     /**
      * Método encargado de posicionar al jugador.
+     *
      * @param pX String -> coordenada.
      * @param pY String -> coordenada.
+     * @return
      */
     @Override
-    public void posicionar_player(String pX, String pY, String pEx, String pEy, Road pCaminos) {
-        //System.out.println("PATH\n"+pX+"-"+pY+"->"+ pEx+"-"+pEy);
-        pCaminos.path("X"+pX+"Y"+pY, "X"+pEx+"Y"+pEy);
+    public String[] posicionar_player(String pX, String pY) {
+        //System.out.println(pX+"-"+pY);
+        return panel.caminos.path(pX,pY);
     }
 
+    /**
+     * Método encargado de actualizar la entidad Enemy.
+     */
     @Override
     public void update() {
         set_acciones();
@@ -84,6 +104,12 @@ public class Enemy extends Sprite{
             }
         }
     }
+
+    /**
+     * Método encargado de dibujar la entidad.
+     * @param g2 Graphics2D
+     * @param panel GamePanel
+     */
     @Override
     public void draw(Graphics2D g2, GamePanel panel) {
         BufferedImage imagen = switch (direccion) {
@@ -96,6 +122,9 @@ public class Enemy extends Sprite{
         g2.drawImage(imagen, x, y, panel.tileSize, panel.tileSize, null);
     }
 
+    /**
+     * Método encargado de obtener las imágenes del directorio.
+     */
     public void getImagenes(){
         try {
             up = ImageIO.read(new FileInputStream("src/Imagenes/Enemigo1_UP.png"));

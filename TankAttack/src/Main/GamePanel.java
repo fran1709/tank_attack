@@ -68,6 +68,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void run() {
         double drawInterval = 1000000000/fps;
         double nextDrawTime = System.nanoTime() + drawInterval;
+        //this.caminos.Start();
         while (gameThread!=null){
             update();
             repaint();
@@ -79,10 +80,13 @@ public class GamePanel extends JPanel implements Runnable {
                 }
                 Thread.sleep((long) remainingTime);
                 nextDrawTime += drawInterval;
+                //System.out.println("asd");
+                //this.encontrar_camino();
 
             }catch (InterruptedException e){
                 e.printStackTrace();
             }
+
         }
 
     }
@@ -111,8 +115,7 @@ public class GamePanel extends JPanel implements Runnable {
         for (Sprite sprite : enemy) {
             if (sprite != null) {
                 sprite.draw(g2, this);
-                sprite.posicionar_player(String.valueOf(sprite.x/48), String.valueOf(sprite.y/48),
-                        String.valueOf(jugador.x/48), String.valueOf(jugador.y/48), caminos);
+                //sprite.posicionar_player(String.valueOf(sprite.x/48), String.valueOf(sprite.y/48), String.valueOf(jugador.x/48), String.valueOf(jugador.y/48), caminos);
             }
         }
         jugador.draw(g2);
@@ -141,6 +144,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.obj[3].x = 8 * this.tileSize;
         this.obj[3].y = 5 * this.tileSize;
         jugador.totalObjetivos++;
+
+        this.enemy[9] = jugador;
     }
 
     //Método que dibuja las estadísticas del juego, (objetivos recolectados, vida del jugador y mensaje de Game Over)
@@ -178,7 +183,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.enemy[1].x = this.tileSize * 7;
         this.enemy[1].y = this.tileSize * 4;
 
-
         this.enemy[2] = new Enemy(this);
         this.enemy[2].x = this.tileSize * 11;
         this.enemy[2].y = this.tileSize * 2;
@@ -195,39 +199,37 @@ public class GamePanel extends JPanel implements Runnable {
                     if (matriz[i+1][j]==0){
                         System.out.println("Fila:" + i);
                         System.out.println("Columna:" + j);
-                        System.out.println("X"+String.valueOf(i) +"Y"+String.valueOf(j) +"->"+
-                                "X"+String.valueOf(i+1) +"Y"+String.valueOf(j));
-                        caminos.add("X" + String.valueOf(i) + "Y"+String.valueOf(j),
-                                "X"+ (String.valueOf(i+1)) + "Y"+String.valueOf(j));
+                        System.out.println("x"+String.valueOf(i) +"x"+String.valueOf(j) +"->"+
+                                "x"+String.valueOf(i+1) +"y"+String.valueOf(j));
+                        caminos.add("x" + String.valueOf(i) + "y"+String.valueOf(j),
+                                "x"+ (String.valueOf(i+1)) + "y"+String.valueOf(j));
                     }
                     else if (matriz[i][j+1] == 0){
                         System.out.println("Fila:" + i);
                         System.out.println("Columna:" + j);
-                        System.out.println("X"+String.valueOf(i) +"Y"+String.valueOf(j) +"->"+
-                                "X"+String.valueOf(i) +"Y"+String.valueOf(j+1));
-                        caminos.add("X" + String.valueOf(i) + "Y"+String.valueOf(j),
-                                "X"+ (String.valueOf(i)) + "Y"+String.valueOf(j+1));
+                        System.out.println("x"+String.valueOf(i) +"y"+String.valueOf(j) +"->"+
+                                "x"+String.valueOf(i) +"y"+String.valueOf(j+1));
+                        caminos.add("x" + String.valueOf(i) + "y"+String.valueOf(j),
+                                "x"+ (String.valueOf(i)) + "y"+String.valueOf(j+1));
                     } else if (matriz[i-1][j]==0){
                         System.out.println("Fila:" + i);
                         System.out.println("Columna:" + j);
-                        System.out.println("X"+String.valueOf(i) +"Y"+String.valueOf(j) +"->"+
-                                "X"+String.valueOf(i-1) +"Y"+String.valueOf(j));
-                        caminos.add("X" + String.valueOf(i) + "Y"+String.valueOf(j),
-                                "X"+ (String.valueOf(i-1)) + "Y"+String.valueOf(j));
+                        System.out.println("x"+String.valueOf(i) +"y"+String.valueOf(j) +"->"+
+                                "x"+String.valueOf(i-1) +"y"+String.valueOf(j));
+                        caminos.add("x" + String.valueOf(i) + "y"+String.valueOf(j),
+                                "x"+ (String.valueOf(i-1)) + "y"+String.valueOf(j));
                     } else if(matriz[i][j-1] == 0){
                         System.out.println("Fila:" + i);
                         System.out.println("Columna:" + j);
-                        System.out.println("X"+String.valueOf(i) +"Y"+String.valueOf(j) +"->"+
-                                "X"+String.valueOf(i) +"Y"+String.valueOf(j-1));
-                        caminos.add("X" + String.valueOf(i) + "Y"+String.valueOf(j),
-                                "X"+ (String.valueOf(i)) + "Y"+String.valueOf(j-1));
+                        System.out.println("x"+String.valueOf(i) +"y"+String.valueOf(j) +"->"+
+                                "x"+String.valueOf(i) +"y"+String.valueOf(j-1));
+                        caminos.add("x" + String.valueOf(i) + "y"+String.valueOf(j),
+                                "x"+ (String.valueOf(i)) + "y"+String.valueOf(j-1));
                     }
                 }
             }
         }
     }
-
-
     //Método que configura juego
     public void gameSetUp(){
         this.initEnemys();

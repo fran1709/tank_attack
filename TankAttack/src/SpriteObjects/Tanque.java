@@ -17,8 +17,8 @@ public class Tanque extends Sprite {
     public int vidas;
 
     //Constructor de la clase
-    public Tanque(){}
     public Tanque(GamePanel gp, KeyHandler kH){
+        super(gp);
         this.panel = gp;
         this.keyH = kH;
         this.vidas = 3;
