@@ -10,8 +10,9 @@ import java.io.IOException;
 
 public class Bala extends Sprite{
 
+    public boolean colision;
     int maxLife, life;
-    Sprite user;
+    public Sprite user;
 
     public Bala(GamePanel p) {
         super(p);

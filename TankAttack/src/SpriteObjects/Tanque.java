@@ -74,6 +74,11 @@ public class Tanque extends Sprite {
                 direccion = "RIGHT";
             }
 
+            //comprobar colision con tanques
+            int tanIndx = panel.ck.check_enemy(this);
+            if (tanIndx != 999){
+                this.vidas--;
+            }
 
             //Comprobar colisión con los muros
             colisionOn = false;
@@ -82,6 +87,22 @@ public class Tanque extends Sprite {
             //Comprobar colisión con los objetivos
             int objIndex = panel.ck.CheckObject(this, true);
             recolectarObjetivo(objIndex);
+
+            //Comprobar disparo acertado
+            /*for (int i = 0; i < panel.enemy.length; i++){
+                if (panel.enemy[i] != null){
+                    int eneIndex = panel.ck.CheckBulletJ(panel.enemy[i], true);
+                    if (dispararEnemigo(eneIndex)){
+                        break;
+                    };
+                }
+
+            }*/
+            panel.ck.checkEnemyBala(panel.balas,panel.enemy);
+
+            //Comprobar que se recibe un disparo
+            int dIndex = panel.ck.CheckBulletE(this, true);
+            disparoRecibido(dIndex);
 
             //Si no hay colisión se mueve el tanque jugador
             if (!colisionOn) {
@@ -96,8 +117,24 @@ public class Tanque extends Sprite {
         if (keyH.shotPressed && !bala.alive){
             bala.set(x+15, y, direccion, true, this);
             panel.balas.add(bala);
-
         }
+    }
+
+    //Método que dispara al tanque jugador
+    public void disparoRecibido(int i){
+        if(i != 999){
+            this.vidas--;
+        }
+    }
+
+    //Método que dispara a los tanques enemigos
+    public boolean dispararEnemigo(int i){
+        if(i != 999){
+            panel.enemy[i] = null;
+            bala.alive = false;
+            return true;
+        }
+        return false;
     }
 
     //Método de recolección de objetivos

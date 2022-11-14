@@ -1,6 +1,11 @@
 package Main;
 
+import SpriteObjects.Bala;
 import SpriteObjects.Sprite;
+import SpriteObjects.Tanque;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 public class ColisionHandler {
     GamePanel panel; //GamePanel del juego
@@ -224,9 +229,165 @@ public class ColisionHandler {
                 }
             }
         }
+
         entity.solidArea.x = entity.solidAreaDefaultX;
         entity.solidArea.y = entity.solidAreaDefaultY;
         panel.jugador.solidArea.x = panel.jugador.solidAreaDefaultX;
         panel.jugador.solidArea.y = panel.jugador.solidAreaDefaultY;
+    }
+    //Método que verifica si el jugador dispara exitosamente a un enemigo
+    public int CheckBulletJ(Sprite entity, boolean player){
+        int index = 999;
+        for(int i = 0; i < panel.balas.size(); i++){
+            if(panel.balas.get(i) != null && panel.balas.get(i).user == panel.jugador){
+                entity.solidArea.x = entity.x + entity.solidArea.x;
+                entity.solidArea.y = entity.y + entity.solidArea.y;
+                panel.balas.get(i).solidArea.x = panel.balas.get(i).x + panel.balas.get(i).solidArea.x;
+                panel.balas.get(i).solidArea.y = panel.balas.get(i).y + panel.balas.get(i).solidArea.y;
+                switch (entity.direccion) {
+                    case "UP" -> {
+                        entity.solidArea.y -= entity.velocidad;
+                        if (entity.solidArea.intersects(panel.balas.get(i).solidArea)) {
+                            if (panel.balas.get(i).colision) {
+                                entity.colisionOn = true;
+                            }
+                            if (player) {
+                                index = i;
+                            }
+                        }
+                    }
+                    case "DOWN" -> {
+                        entity.solidArea.y += entity.velocidad;
+                        if (entity.solidArea.intersects(panel.balas.get(i).solidArea)) {
+                            if (panel.balas.get(i).colision) {
+                                entity.colisionOn = true;
+                            }
+                            if (player) {
+                                index = i;
+                            }
+                        }
+                    }
+                    case "LEFT" -> {
+                        entity.solidArea.x -= entity.velocidad;
+                        if (entity.solidArea.intersects(panel.balas.get(i).solidArea)) {
+                            if (panel.balas.get(i).colision) {
+                                entity.colisionOn = true;
+                            }
+                            if (player) {
+                                index = i;
+                            }
+                        }
+                    }
+                    case "RIGHT" -> {
+                        entity.solidArea.x += entity.velocidad;
+                        if (entity.solidArea.intersects(panel.balas.get(i).solidArea)) {
+                            if (panel.balas.get(i).colision) {
+                                entity.colisionOn = true;
+                            }
+                            if (player) {
+                                index = i;
+                            }
+                        }
+                    }
+                }
+                entity.solidArea.x = entity.solidAreaDefaultX;
+                entity.solidArea.y = entity.solidAreaDefaultY;
+                panel.balas.get(i).solidArea.x = panel.balas.get(i).solidAreaDefaultX;
+                panel.balas.get(i).solidArea.y = panel.balas.get(i).solidAreaDefaultY;
+            }
+        }
+        return index;
+    }
+
+    //Método que verifica si el jugador dispara exitosamente a un enemigo
+    public int CheckBulletE(Sprite entity, boolean player){
+        int index = 999;
+        for(int i = 0; i < panel.balas.size(); i++){
+            if(panel.balas.get(i) != null && panel.balas.get(i).user != entity){
+                entity.solidArea.x = entity.x + entity.solidArea.x;
+                entity.solidArea.y = entity.y + entity.solidArea.y;
+                panel.balas.get(i).solidArea.x = panel.balas.get(i).x + panel.balas.get(i).solidArea.x;
+                panel.balas.get(i).solidArea.y = panel.balas.get(i).y + panel.balas.get(i).solidArea.y;
+                switch (entity.direccion) {
+                    case "UP" -> {
+                        entity.solidArea.y -= entity.velocidad;
+                        if (entity.solidArea.intersects(panel.balas.get(i).solidArea)) {
+                            if (panel.balas.get(i).colision) {
+                                entity.colisionOn = true;
+                            }
+                            if (player) {
+                                index = i;
+                            }
+                        }
+                    }
+                    case "DOWN" -> {
+                        entity.solidArea.y += entity.velocidad;
+                        if (entity.solidArea.intersects(panel.balas.get(i).solidArea)) {
+                            if (panel.balas.get(i).colision) {
+                                entity.colisionOn = true;
+                            }
+                            if (player) {
+                                index = i;
+                            }
+                        }
+                    }
+                    case "LEFT" -> {
+                        entity.solidArea.x -= entity.velocidad;
+                        if (entity.solidArea.intersects(panel.balas.get(i).solidArea)) {
+                            if (panel.balas.get(i).colision) {
+                                entity.colisionOn = true;
+                            }
+                            if (player) {
+                                index = i;
+                            }
+                        }
+                    }
+                    case "RIGHT" -> {
+                        entity.solidArea.x += entity.velocidad;
+                        if (entity.solidArea.intersects(panel.balas.get(i).solidArea)) {
+                            if (panel.balas.get(i).colision) {
+                                entity.colisionOn = true;
+                            }
+                            if (player) {
+                                index = i;
+                            }
+                        }
+                    }
+                }
+                entity.solidArea.x = entity.solidAreaDefaultX;
+                entity.solidArea.y = entity.solidAreaDefaultY;
+                panel.balas.get(i).solidArea.x = panel.balas.get(i).solidAreaDefaultX;
+                panel.balas.get(i).solidArea.y = panel.balas.get(i).solidAreaDefaultY;
+            }
+        }
+        return index;
+    }
+    public void checkEnemyBala(ArrayList<Bala> balas, Sprite[] TankAIs) {
+        for (int x = 0; x < balas.size(); x++) {
+            Bala b = balas.get(x);
+            Rectangle r1 = b.solidArea.getBounds();
+            for (int i = 0; i < 10; i++) {
+                Sprite tankAI = TankAIs[i];
+                if ( tankAI != null){
+                    Rectangle r2 = tankAI.solidArea.getBounds();
+                    if (r1.intersects(r2) && b.user == panel.jugador) {
+                        b.alive = false;
+                        TankAIs[i] = null;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    public static void checkJugadorBala(ArrayList<Bala> balas, Tanque tank) {
+        Rectangle r2 = tank.solidArea.getBounds();
+        for (int x = 0; x < balas.size(); x++) {
+            Bala b = balas.get(x);
+            Rectangle r1 = b.solidArea.getBounds();
+            if (r1.intersects(r2) && b.user != tank) {
+                b.alive = false;
+                tank.vidas--;
+            }
+        }
     }
 }

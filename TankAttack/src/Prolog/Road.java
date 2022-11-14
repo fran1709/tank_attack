@@ -23,10 +23,14 @@ public class Road {
 		}
 		System.out.println(best_path.oneSolution().get("Camino")+"\n");
 		best_path.close();
-		String[] direction = {String.valueOf(best_path.oneSolution().get("Camino").arg(1)),
-				String.valueOf(best_path.oneSolution().get("Camino").arg(2))};
 
-		return direction;
+		try {
+			String[] direction = {String.valueOf(best_path.oneSolution().get("Camino").arg(1)),
+					String.valueOf(best_path.oneSolution().get("Camino").arg(2))};
+			return direction;
+		} catch (JPLException e){}
+
+		return new String[2];
     }
 
 	public void add(String pAtomA, String pAtomB){

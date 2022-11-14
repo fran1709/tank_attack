@@ -5,6 +5,7 @@ import Objetos.Objetivo1;
 import Objetos.Objetivo2;
 import Objetos.Objeto;
 import Prolog.Road;
+import SpriteObjects.Bala;
 import SpriteObjects.Enemy;
 import SpriteObjects.Sprite;
 import SpriteObjects.Tanque;
@@ -13,7 +14,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GamePanel extends JPanel implements Runnable {
     //Configuración del tamaño del GamePanel
@@ -44,7 +44,7 @@ public class GamePanel extends JPanel implements Runnable {
     Tanque jugador = new Tanque(this, keyControl); //Instancia del tanque jugador
     public Objeto[] obj = new Objeto[10]; //Lista de objetivos
     public Sprite[] enemy = new Sprite[10];
-    public ArrayList<Sprite> balas = new ArrayList<>(); //Array de balas
+    public ArrayList<Bala> balas = new ArrayList<>(); //Array de balas
     Mapa map = new Mapa(this); //Mapa del juego
     public Road caminos = new Road();
     public ColisionHandler ck = new ColisionHandler(this); //Controlador de colisiones entre objetos
